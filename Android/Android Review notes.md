@@ -207,7 +207,7 @@
 		- 继承Thread类
 		- 实现Runnable接口
 	- Thread类中Start()和Run()方法区别
-		- start()方法被用来启动新创建的线程，start()方法内部调用了run()方法
+		- start()方法被用来启动新创建的线程，使线程开始执行，Java虚拟机调用该线程run方法
 		- 只有调用start()方法才会创建新的线程 
 	- `Volatile` ：用volatile修饰的变量，线程在每次使用变量的时候，都会读取变量修改后的最新的值
 	- `多线程并发问题`
@@ -237,15 +237,15 @@
 		- 线程安全
 		- hash算法，Hashtable直接利用key本身的hash码来做验证
 		- 数据遍历方式Iterator(支持fast-fail)和Enumeration(不支持fast-fail)
-		- 缺省初始长度为11，内部都为抽象方法
+		- 缺省初始长度为11
 	- HashMap
-		- 继承自AbstractMap抽象类
+		- 继承自AbstractMap抽象类，实现Map接口
 		- 键、值都可以是空对象
 		- 多次访问，映射元素顺序可能不同
 		- 非线程安全[`HashMap可以通过下面的语句进行同步：Map m = Collections.synchronizeMap(hashMap);`]
 		- 检测是否含有key时，HashMap内部需要将key的hash码重新计算一遍再检测
 		- 数据遍历方式Iterator(支持fast-fail)	
-		- 缺省初始长度为16，内部已经实现了Map所需要做的大部分工作
+		- 缺省初始长度为16[Android:4]，内部已经实现了Map所需要做的大部分工作
 - HashCode：主要用于查找的快捷性
 	-   两个对象相同，即适用于equals(java.lang.Object)方法，那么这两个对象的hashCode一定要相同
 	-   如果对象的equals方法被重写，那么对象的hashCode也尽量重写。不能违反上面一条规则
@@ -517,7 +517,7 @@ function quickSort(arr) {
 ### 树结构
 ---
 + AVL数／哈夫曼树
-	+ AVL树：`任何节点的两个紫薯的高度最大差为1`。查找、插入和删除在平均和最坏情况下都是`O(log n)` 
+	+ AVL树：`任何节点的两个子树的高度最大差为1`。查找、插入和删除在平均和最坏情况下都是`O(log n)` 
 	+ 哈夫曼树：又称最优二叉树。是一种带权路径长度最短的二叉树
 		+ 哈夫曼编码：可变长编码。有时称之为最佳编码。主要应用在数据压缩，加密解密等场合
 	 

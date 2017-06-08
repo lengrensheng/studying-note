@@ -16,7 +16,7 @@
 	
 ### 常见内存泄漏
 + 单例模式造成的内存泄漏：`单例的静态特性使得单例的生命周期和应用的生命周期一样长`
-+ 非静态内部类创建静态实例造成的内存泄漏：``
++ 非静态内部类创建静态实例造成的内存泄漏：
 + Handler造成的内存泄漏[`静态内部类+弱引用，onDestroy: mHandler.removeCallbacksAndMessages(null)或者removeCallbacks/Messages——移除指定Runnable/Message`]
 + 线程造成的内存泄漏：`静态内部类+弱引用`
 + 资源未关闭造成的内存泄漏：`BroadcastReceiver/ContentObserver/File/Cursor/Stream/Bitmap等`
