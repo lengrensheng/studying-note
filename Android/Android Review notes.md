@@ -127,20 +127,20 @@
 	- dispatchTouchEvent：负责事件分发处理
 		- `return true`：表示该View内部消化所有事件
 		- `return false`：表示在本层不再继续进行分发，并交由上层控件的onTouchEvent方法进行消费（如果本层控件已经是Activity，那么事件将被系统消费或处理）
-		- `return super.dispatchTouchEvent(ev)`，事件将分发给本层的事件拦截`onInterceptTouchEvent`方法进行处理 
+		- `return super.dispatchTouchEvent(ev)`，Activity --> 父类ViewGroup的dispatchTouchEvent()处理，ViewGroup --> `onInterceptTouchEvent`方法进行处理，View --> onTouchEvent()处理
 	- onInterceptTouchEvent：负责事件拦截处理
 		- `return true`：表示将事件进行拦截。并将拦截到的事件交由本层控件的onTouchEvent进行处理
 		- `return false`：表示不对事件进行拦截。事件得以成功分发到子View。并由子View的dispatchTouchEvent进行处理
-		- `return super.onInterceptTouchEvent(ev)`：默认表示拦截该事件，并将事件传递给当前View的onTouchEvent方法
+		- `return super.onInterceptTouchEvent(ev)`：默认false
 	- onTouchEvent：处理触控事件
 		- `return true`：表示onTouchEvent处理完事件后消费了此次事件。此时事件终止
-		- `return false`：表示不响应事件，该事件将会不断向上层View的onTouchEvent方法传递，知道某个View的onTouchEvent方法返回`true`
+		- `return false`：表示不响应事件，该事件将会不断向上层View的onTouchEvent方法传递，直到某个View的onTouchEvent方法返回`true`
 		- `return super.dispatchTouchEvent(ev)` ：表示不响应事件，结果与`return false`一样。 
 	- 子View可以通过调用`getParent().requestDisallowInterceptTouchEvent(true)`阻止ViewGroup对其`MOVE`或者`UP`事件进行拦截
-	- 点击事件产生之后，传递过程：Activity ===> Window ===> View。顶级View接收到事件之后，就会按相应规则去分发事件。
+	- 点击事件产生之后，传递过程：Activity（Window） ===> ViewGroup ===> View。顶级View接收到事件之后，就会按相应规则去分发事件。
 	- ViewGroup默认不拦截任何事件
 - SQLite
-	- ACID事物
+	- 事务标准属性：ACID
 		- 原子性(Atomicity)
 		- 一致性(Consistency)
 		- 隔离性(Isolation)
@@ -194,7 +194,7 @@
 - Zygote启动过程
 - Binder机制：Binder是实现远程跨进程通信的桥梁，主要负责：实现将数据从客户端传送到服务器端，并将服务器的处理结果传递给客户端
 ![img](./images/binder_structure.png)
-- Binder驱动实现原理：我们所持有的Binder引用（即服务器端的类引用）并不是实际真实的远程Bider对象，我们所持有的引用在Binder驱动里还要做一次映射。即设备驱动根据我们的引用对象找到对应的远程进程。客户端要调用远程对象函数时，只需要把数据写入到Parcel，在调用所持有的Binder引用的`transact()`函数，transact函数执行过程中会把参数、标识符等数据放入Client的共享内存，Binder驱动从Client的共享内存中读取数据，根据这些数据找到对应的远程进程的共享内存，把数据拷贝到远程进程的共享内存中，并通知远程进程执行onTransact()函数[属于Binder类]。远程进程Binder对象执行完成后，将得到的数据写入到自己共享内存中，Binder驱动再将远程数据共享内存数据拷贝到客户端共享内存中，并唤醒客户端线程。
+- Binder驱动实现原理：我们所持有的Binder引用（即服务器端的类引用）并不是实际真实的远程Bider对象，我们所持有的引用在Binder驱动里还要做一次映射。即设备驱动根据我们的引用对象找到对应的远程进程。客户端要调用远程对象函数时，只需要把数据写入到Parcel，再调用所持有的Binder引用的`transact()`函数，transact函数执行过程中会把参数、标识符等数据放入Client的共享内存，Binder驱动从Client的共享内存中读取数据，根据这些数据找到对应的远程进程的共享内存，把数据拷贝到远程进程的共享内存中，并通知远程进程执行onTransact()函数[属于Binder类]。远程进程Binder对象执行完成后，将得到的数据写入到自己共享内存中，Binder驱动再将远程数据共享内存数据拷贝到客户端共享内存中，并唤醒客户端线程。
 
 ![img](./images/binder_principle.png)
 
